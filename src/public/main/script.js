@@ -3,16 +3,18 @@ const player2Score = document.getElementById('player-2-score')
 
 let gameStarting = true
 
-player1Score.innerText = (0).toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false
-})
-player2Score.innerText = (0).toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false
-})
+player1Score.innerText = formatNumber(0)
+player2Score.innerText = formatNumber(0)
+
+function formatNumber(number) {
+    return number.toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+    })
+}
 
 function angleCalculator(x1, y1, x2, y2) {
+    // console.log(`(${x1}, ${y1}), (${x2}, ${y2})`)
     let differenceInX;
     let differenceInY;
     if (x1 > x2 || y1 > y2) {
@@ -22,10 +24,14 @@ function angleCalculator(x1, y1, x2, y2) {
         differenceInX = x2 - x1
         differenceInY = y2 - y1
     }
-    
+
     let opposite = differenceInY;
     let hypotenuse = differenceInX;
+    // console.log(opposite)
+    // console.log(hypotenuse)
     let angle = Math.tan(degreesToRadians(hypotenuse / opposite))
+
+    if (!angle) return 180
     return angle
 }
 
@@ -71,32 +77,66 @@ class Ball {
         ball.style['left'] = '750px'
 
         let player1 = document.getElementById('player-1')
+        let player2 = document.getElementById('player-2')
+        let player1Score = document.getElementById('player-1-score')
+        let player2Score = document.getElementById('player-2-score')
+        let endPrompt = document.getElementById('end-prompt')
 
         let movingBall = setInterval(() => {
             if (this.direction === 'left') {
-                ball.style['left'] = `${Number(getComputedStyle(ball)['left'].slice(0, -2)) - 10}px`
+                ball.style['left'] = `${parseInt(getComputedStyle(ball)['left']) - 10}px`
 
-                if (Number(getComputedStyle(ball)['left'].slice(0, -2)) <= 580) {
-                    ball.hidden = true
-                    clearInterval(movingBall)
+                if (parseInt(getComputedStyle(ball)['left']) <= 580) {
+                    player2Score.innerText = formatNumber(parseInt(player2Score.innerText) + 1)
+
+                    if (parseInt(player2Score.innerText) >= 10) {
+                        endPrompt.hidden = false
+                        document.body.innerHTML = document.body.innerHTML.replace('$player', '2')
+                        clearInterval(movingBall)
+                        return
+                    }
+                    this.resetBall()
                 }
                 if (ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right && ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left && ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player1.getBoundingClientRect().bottom) {
                     this.direction = 'right'
+
+                    // console.log(angleCalculator((player1.getBoundingClientRect().bottom - player1.getBoundingClientRect().top) / 2, (player1.getBoundingClientRect().right - player1.getBoundingClientRect().left) / 2, (ball.getBoundingClientRect().bottom - ball.getBoundingClientRect().top) / 2, (ball.getBoundingClientRect().right - ball.getBoundingClientRect().left) / 2))
                 }
             }
             if (this.direction === 'right') {
-                ball.style['left'] = `${Number(getComputedStyle(ball)['left'].slice(0, -2)) + 10}px`
+                ball.style['left'] = `${parseInt(getComputedStyle(ball)['left']) + 10}px`
 
-                if (Number(getComputedStyle(ball)['left'].slice(0, -2)) >= 1350) {
-                    ball.hidden = true
-                    clearInterval(movingBall)
+                if (parseInt(getComputedStyle(ball)['left']) >= 1350) {
+                    player1Score.innerText = formatNumber(parseInt(player1Score.innerText) + 1)
+
+                    if (parseInt(player1Score.innerText) >= 10) {
+                        endPrompt.hidden = false
+                        document.body.innerHTML = document.body.innerHTML.replace('$player', '1')
+                        clearInterval(movingBall)
+                        return
+                    }
+                    this.resetBall(ball)
                 }
-                if (ball.getBoundingClientRect().right <= player2.getBoundingClientRect().left && ball.getBoundingClientRect().right >= player2.getBoundingClientRect().right && ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom) {
+                // console.log('hi')
+                console.log(`Ball: ${ball.getBoundingClientRect().left}`)
+                console.log(`Ball: ${ball.getBoundingClientRect().right}`)
+                console.log(`Player2: ${player2.getBoundingClientRect().left}`)
+                console.log(`Player2: ${player2.getBoundingClientRect().right}`)
+                console.log('a', ball.getBoundingClientRect().right >= player2.getBoundingClientRect().left)
+                console.log('b', ball.getBoundingClientRect().right <= player2.getBoundingClientRect().right)
+                console.log('c', ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top)
+                console.log('d', ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom)
+                // setTimeout(() => this.direction = 'left', 2000)
+                if (ball.getBoundingClientRect().right >= player2.getBoundingClientRect().left && ball.getBoundingClientRect().right <= player2.getBoundingClientRect().right && ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom) {
+                    console.log('hi2')
                     this.direction = 'left'
                 }
             }
-            console.log(ball.style['left'])
-        }, 50)
+            // console.log(ball.style['left'])
+        }, 20)
+    }
+    resetBall() {
+        ball.style['left'] = '750px'
     }
 }
 
@@ -108,14 +148,13 @@ function main() {
 
     document.addEventListener('keydown', (event) => {
         let key = event.key
-        // console.log(event)
 
         if (gameStarting) {
             let startPrompt = document.getElementById('start-prompt')
             startPrompt.hidden = true
 
-            let ball = document.getElementById('ball')
-            ball.hidden = false
+            let element = document.getElementById('ball')
+            element.hidden = false
 
             ball = new Ball('left', 10)
 
@@ -125,24 +164,23 @@ function main() {
             let player2 = document.getElementById('player-2')
 
             if (key === 'w') {
-                console.log('hi')
-                if (Number(getComputedStyle(player1)['top'].slice(0, -2)) <= 80) return;
-                console.log('hi2')
-                player1.style['top'] = `${Number(getComputedStyle(player1)['top'].slice(0, -2)) - 20 }px`
+                if (parseInt(getComputedStyle(player1)['top']) <= 80) return;
+                player1.style['top'] = `${parseInt(getComputedStyle(player1)['top']) - 20 }px`
             } else if (key === 's') {
-                if (Number(getComputedStyle(player1)['top'].slice(0, -2)) >= 760) return;
-                player1.style['top'] = `${Number(getComputedStyle(player1)['top'].slice(0, -2)) + 20 }px`
+                if (parseInt(getComputedStyle(player1)['top']) >= 760) return;
+                player1.style['top'] = `${parseInt(getComputedStyle(player1)['top']) + 20 }px`
             } else if (key === 'ArrowUp') {
-                if (Number(getComputedStyle(player2)['top'].slice(0, -2)) <= 80) return;
-                player2.style['top'] = `${Number(getComputedStyle(player2)['top'].slice(0, -2)) - 20 }px`
+                if (parseInt(getComputedStyle(player2)['top']) <= 80) return;
+                player2.style['top'] = `${parseInt(getComputedStyle(player2)['top']) - 20 }px`
             } else if (key === 'ArrowDown') {
-                if (Number(getComputedStyle(player2)['top'].slice(0, -2)) >= 760) return;
-                player2.style['top'] = `${Number(getComputedStyle(player2)['top'].slice(0, -2)) + 20 }px`
+                if (parseInt(getComputedStyle(player2)['top']) >= 760) return;
+                player2.style['top'] = `${parseInt(getComputedStyle(player2)['top']) + 20 }px`
             }
             console.log(`Player 1: ${getComputedStyle(player1)['top']}`)
             console.log(`Player 2: ${getComputedStyle(player2)['top']}`)
         }
     })
+
     gameContainer.addEventListener('contextmenu', (event) => {
         event.preventDefault()
     });
