@@ -1,10 +1,6 @@
 bugs
-
-
-
-
-
-
+Only player 1 gets points for some reason
+paddle 2 collision and its wall is weird
 
 adding angles and more directions besides 180/-180 degree
 
