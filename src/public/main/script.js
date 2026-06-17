@@ -2,43 +2,52 @@ const canvas = document.getElementById('game')
 const context = canvas.getContext('2d')
 
 function main() {
-    let x = canvas.width / 2 - 20
-    let keys = {};
+    let gameStarting = true
+
+    let paddleWidth = 10
+    let paddleHeight = 100
 
     let player_1 = {
-        x: x,
-        y: y,
-        speed: 10,
+        score: 0,
+        x: 10,
+        y: canvas.height / 2 - 75,
+        width: paddleWidth,
+        height: paddleHeight
     }
 
     let player_2 = {
-        x: x,
-        y: y,
-        speed: 10,
+        score: 0,
+        x: canvas.width - 20,
+        y: canvas.height / 2 - 75,
+        width: paddleWidth,
+        height: paddleHeight
     }
 
     let ball = {
-        x: x,
-        y: y,
-        speed: 10,
+        originalX: canvas.width / 2 - 20,
+        originalY: canvas.height / 2 - 30,
+        x: null,
+        y: canvas.height / 2 - 30,
+        width: 10,
+        height: 10,
+        miliseconds: 100,
+        // miliseconds: 30,
+        direction: -90
     }
+    ball.x = ball.originalX
+
+    let keys = {};
 
     function draw() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = '#000000'
-        context.fillStyle = '#000000'
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         context.fillStyle = '#ffffff';
-        context.fillRect(10, canvas.height / 2 - 75, 10, 100);
+        context.fillRect(player_1.x, player_1.y, player_1.width, player_1.height);
 
         context.fillStyle = '#ffffff';
-        context.fillRect(canvas.width - 20, canvas.height / 2 - 75, 10, 100);
-
-        context.fillStyle = '#ffffff';
-        context.fillRect(x, canvas.height / 2 - 30, 10, 10);
-
-        setInterval(() => x -= 10, 1000)
+        context.fillRect(player_2.x, player_2.y, player_2.width, player_2.height);
 
         context.beginPath()
         context.setLineDash([10, 15])
@@ -49,55 +58,83 @@ function main() {
         context.stroke()
 
         context.font = '100px Arial';
-        context.fillText(`${formatNumber(0)}`, 50, 100);
+        context.fillText(`${formatNumber(player_1.score)}`, 50, 100);
 
         context.font = '100px Arial';
-        context.fillText(`${formatNumber(0)}`, canvas.width - 150, 100);
+        context.fillText(`${formatNumber(player_2.score)}`, canvas.width - 150, 100);
 
-        // context.font = '50px Arial';
-        // context.fillText('Press any key to begin', 125, canvas.height / 2);
-
-        // context.font = '50px Arial';
-        // let winner = '1'
-        // context.fillText(`Player ${winner} won!`, 125, canvas.height / 2); 
-
-        window.requestAnimationFrame(draw);
+        if (gameStarting) {
+            context.font = '50px Arial';
+            context.fillText('Press any key to begin', 125, canvas.height / 2);
+        } else {
+            context.fillStyle = '#ffffff';
+            context.fillRect(ball.x, ball.y, 10, 10)
+        }
     }
-    draw();
 
     document.addEventListener('keydown', (event) => {
         let key = event.key
         keys[key] = true;
 
         if (gameStarting) {
-            let startPrompt = document.getElementById('start-prompt')
-            startPrompt.hidden = true
+            let ballMovement = setInterval(() => {
+                if (ball.direction >= -180 && ball.direction < 0) {
+                    ball.x -= 10
+                } else if (ball.direction.direction >= 0 && ball.direction >= 180) {
+                    ball.x += 10
 
-            let element = document.getElementById('ball')
-            element.hidden = false
+                }
 
-            ball = new Ball('left', 10)
+                console.log(`Player 1 x: ${player_1.x}\nBall x:${ball.x}`)
+                console.log(ball.x >= player_1.x)
+                console.log(ball.x <= player_1.x + player_1.width)
+                console.log(ball.y >= player_1.y)
+                console.log(ball.y <= player_1.y + player_1.height)
+                console.log(player_1.height)
+                if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
+                // if (ball.x >= player_1.x && ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
+                    console.log(ball.direction)
+                    ball.direction = -ball.direction
+                    console.log(ball.direction)
+                    console.log('direction change ^^^ dnjkofgmnsjonfmgsjoingfsjonfgsjiongfsjinsgfjiongsfjionju')
+                }
+
+                if (ball.x <= 0) {
+                    ball.x = ball.originalX
+                    player_2.score += 1
+                } else if (ball.x >= 750) {
+                    ball.x = ball.originalX
+                    player_1.score += 1
+                }
+                window.requestAnimationFrame(draw);
+                if (player_1.score >= 10 || player_2.score >= 10) {
+                    ball.x = -500
+                    context.font = '50px Arial';
+                    console.log(`Player ${player_1.score >= 10 ? 1 : 2} won!`, 125, canvas.height / 2)
+                    context.fillText(`Player ${player_1.score >= 10 ? 1 : 2} won!`, 125, canvas.height / 2);
+                    window.requestAnimationFrame(draw);
+                    clearInterval(ballMovement);
+                }
+                // ball.x = ball.originalX
+            }, ball.miliseconds)
 
             gameStarting = false
         } else {
-            let player1 = document.getElementById('player-1')
-            let player2 = document.getElementById('player-2')
-
             if (key === 'w') {
-                if (parseInt(getComputedStyle(player1)['top']) <= 80) return;
-                player1.style['top'] = `${parseInt(getComputedStyle(player1)['top']) - 20 }px`
+                if (player_1.y <= 0) return;
+                player_1.y -= 20
             } else if (key === 's') {
-                if (parseInt(getComputedStyle(player1)['top']) >= 760) return;
-                player1.style['top'] = `${parseInt(getComputedStyle(player1)['top']) + 20 }px`
+                if (player_1.y >= 660) return;
+                player_1.y += 20
             } else if (key === 'ArrowUp') {
-                if (parseInt(getComputedStyle(player2)['top']) <= 80) return;
-                player2.style['top'] = `${parseInt(getComputedStyle(player2)['top']) - 20 }px`
+                if (player_2.y <= 0) return;
+                player_2.y -= 20
             } else if (key === 'ArrowDown') {
-                if (parseInt(getComputedStyle(player2)['top']) >= 760) return;
-                player2.style['top'] = `${parseInt(getComputedStyle(player2)['top']) + 20 }px`
+                if (player_2.y >= 660) return;
+                player_2.y += 20
             }
-            console.log(`Player 1: ${getComputedStyle(player1)['top']}`)
-            console.log(`Player 2: ${getComputedStyle(player2)['top']}`)
+            // console.log(`Player 1: ${player_1.y}`)
+            // console.log(`Player 2: ${player_2.y}`)
         }
     })
 
@@ -107,15 +144,16 @@ function main() {
     });
 
     function render() {
-        element.textContent = JSON.stringify(keys);
         requestAnimationFrame(render);
     }
 
     render()
 
-    gameContainer.addEventListener('contextmenu', (event) => {
+    game.addEventListener('contextmenu', (event) => {
         event.preventDefault()
     });
+
+    draw();
 }
 
 main()
