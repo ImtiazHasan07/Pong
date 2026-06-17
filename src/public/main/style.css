@@ -1,0 +1,28 @@
+html {
+    user-select: none;
+    color: #ffffff;
+}
+
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.game-container {
+    /* border: 1px solid #000000; */
+    background-color: #000000;
+    width: 750px;
+    height: 750px;
+    margin-left: 30.5%;
+}
+
+.top-container {
+    display: flex;
+}
+
+.player-2-container {
+    margin-left: 60%;
+}
