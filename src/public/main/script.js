@@ -117,16 +117,6 @@ class Ball {
                     }
                     this.resetBall(ball)
                 }
-                // console.log('hi')
-                console.log(`Ball: ${ball.getBoundingClientRect().left}`)
-                console.log(`Ball: ${ball.getBoundingClientRect().right}`)
-                console.log(`Player2: ${player2.getBoundingClientRect().left}`)
-                console.log(`Player2: ${player2.getBoundingClientRect().right}`)
-                console.log('a', ball.getBoundingClientRect().right >= player2.getBoundingClientRect().left)
-                console.log('b', ball.getBoundingClientRect().right <= player2.getBoundingClientRect().right)
-                console.log('c', ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top)
-                console.log('d', ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom)
-                // setTimeout(() => this.direction = 'left', 2000)
                 if (ball.getBoundingClientRect().right >= player2.getBoundingClientRect().left && ball.getBoundingClientRect().right <= player2.getBoundingClientRect().right && ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom) {
                     console.log('hi2')
                     this.direction = 'left'
