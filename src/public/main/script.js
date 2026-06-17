@@ -12,8 +12,8 @@ function angleCalculator(x1, y1, x2, y2) {
     //     differenceInX = x2 - x1
     //     differenceInY = y2 - y1
     // }
-    let differenceInX = difference(x1, x2);
-    let differenceInY = difference(y1, y2);
+    let differenceInX = getDifference(x1, x2);
+    let differenceInY = getDifference(y1, y2);
 
     let opposite = differenceInY;
     let adjacent = differenceInX;
@@ -30,6 +30,13 @@ function angleCalculator(x1, y1, x2, y2) {
     // return angle
 }
 
+function formatNumber(number) {
+    return number.toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+    })
+}
+
 function degreesToRadians(degrees) {
     return degrees * Math.PI / 180;
 }
@@ -38,7 +45,7 @@ function radiansToDegrees(radians) {
     return radians * (180 / Math.PI);
 }
 
-function difference(a, b) {
+function getDifference(a, b) {
     return a > b ? a - b : b - a
 }
 
@@ -232,11 +239,3 @@ function main() {
 }
 
 main()
-
-
-function formatNumber(number) {
-    return number.toLocaleString('en-US', {
-        minimumIntegerDigits: 2,
-        useGrouping: false
-    })
-}

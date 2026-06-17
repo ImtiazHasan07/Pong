@@ -15,21 +15,6 @@ app.get('/', async (req, res) => {
   res.send(file);
 });
 
-app.get('/:page', (req, res) => {
-  let page = req.params.page;
-
-  let file;
-
-  try {
-    file = fs.readFileSync(__dirname + `/public/${page}/index.html`, {
-      encoding: 'utf-8'
-    })
-  } catch (err) {}
-
-  res.send(file);
-});
-
 app.listen(port, () => {
   console.log(`http://localhost:${port}/`);
-  console.log(`App listening on port ${port}`);
 });
