@@ -10,25 +10,9 @@
 <body>
     <div class='container'>
         <h1>Pong</h1>
-        <div id='game-container' class='game-container'>
-            <div class='top-container'>
-                <div class='player-1-container'>
-                    <span id='player-1-score' class='score'>$player1_score</span>
-                </div>
-                <div class='player-2-container'>
-                    <span id='player-2-score' class='score'>$player2_score</span>
-                </div>
-            </div>
-            <div class='game'>
-                <h2 id='start-prompt' class='prompt'>Press any key to begin</h2>
-                <h2 id='end-prompt' class='prompt' hidden>Player $player won!</h2>
-                <div id='player-1' class='player player-1'></div>
-                <div id='ball' class='ball' hidden></div>
-                <div id='wall' class='wall'></div>
-                <div id='player-2' class='player player-2'></div>
-            </div>
-        </div>
+        <canvas id='game' width='750' height='750'></canvas>
         <script src='script.js'></script>
+    </div>
 </body>
 
 </html>
