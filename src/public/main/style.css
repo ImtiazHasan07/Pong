@@ -23,6 +23,52 @@ h1 {
     display: flex;
 }
 
+.player-1-container {
+    margin-left: 5%;
+}
+
 .player-2-container {
     margin-left: 60%;
+}
+
+.wall {
+    position: absolute;
+    left: 965px;
+    bottom: 0;
+    top: 100px;
+    border: 5px dashed #ffffff;
+    width: 0px;
+    height: 700px;
+}
+
+.player {
+    position: absolute;
+    background-color: #ffffff;
+    width: 10px;
+    height: 75px;
+}
+
+.ball {
+    position: absolute;
+    top: 375px;
+    left: 750px;
+    background-color: #ffffff;
+    width: 10px;
+    height: 10px;
+}
+
+.player-1 {
+    left: 610px;
+    top: 350px;
+}
+
+.player-2 {
+    left: 1310px;
+    top: 350px;
+}
+
+.score {
+    font-family: sans-serif;
+    /* this meant to be a robot/digit alarm clock sort of font */
+    font-size: 100px;
 }
