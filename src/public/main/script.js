@@ -68,16 +68,19 @@ function main() {
     let ball = {
         originalX: canvas.width / 2 - 20,
         originalY: canvas.height / 2 - 30,
-        originalSpeed: 50,
+        originalSpeed: 5,
+        originalDirection: 180,
         x: null,
-        y: canvas.height / 2 - 30,
+        y: null,
         width: 10,
         height: 10,
-        speed: 5,
-        direction: 45,
-        angle: 45
+        speed: null,
+        direction: null
     }
     ball.x = ball.originalX
+    ball.y = ball.originalY
+    ball.speed = ball.originalSpeed
+    ball.direction = ball.originalDirection
 
     let keys = {};
 
@@ -126,27 +129,45 @@ function main() {
 
                 if (ball.y < 0 || ball.y > canvas.height) {
                     ball.direction = -ball.direction
+                    // ball.direction = 180 - ball.direction
+                }
+                console.log(ball.direction)
+
+                if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
+                    if (Math.floor(Math.random() * 2) + 1 === 1) {
+                        ball.direction += 45
+                    } else {
+                        ball.direction -= 45
+                    }
+                    // ball.direction = 180 - ball.direction
                 }
 
-                if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height && ball.direction < 0) {
-                    ball.direction += 45
-                }
-
-                if (ball.x >= player_2.x && ball.y >= player_2.y && ball.y <= player_2.y + player_2.height && ball.direction > 0) {
-                    ball.direction = -ball.direction
+                if (ball.x >= player_2.x && ball.y >= player_2.y && ball.y <= player_2.y + player_2.height) {
+                    // if (Math.floor(Math.random() * 2) + 1 === 1) {
+                    //     ball.direction += 45
+                    // } else {
+                    //     ball.direction -= 45
+                    // }
+                    // ball.direction = 180 - ball.direction
                 }
 
                 if (ball.x <= 0) {
                     ball.x = ball.originalX
                     ball.y = ball.originalY
                     player_2.score += 1
-                    ball.direction = 0
+                    ball.x = ball.originalX
+                    ball.y = ball.originalY
+                    ball.speed = ball.originalSpeed
+                    ball.direction = ball.originalDirection
 
                 } else if (ball.x >= 750) {
                     ball.x = ball.originalX
                     ball.y = ball.originalY
                     player_1.score += 1
-                    ball.direction = 180
+                    ball.x = ball.originalX
+                    ball.y = ball.originalY
+                    ball.speed = ball.originalSpeed
+                    ball.direction = ball.originalDirection
                 }
                 window.requestAnimationFrame(draw);
                 if (player_1.score >= 10 || player_2.score >= 10) {
