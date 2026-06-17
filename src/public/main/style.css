@@ -72,3 +72,11 @@ h1 {
     /* this meant to be a robot/digit alarm clock sort of font */
     font-size: 100px;
 }
+
+.prompt {
+    /* background-color: #000000; */
+    font-size: 40px;
+    position: absolute;
+    left: 750px;
+    top: 350px;
+}
