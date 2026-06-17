@@ -32,24 +32,84 @@ class Game {
     }
 }
 
+class Ball {
+    constructor(direction, speed) {
+        this.direction = direction;
+        this.speed = speed;
+        this.ball = document.getElementById('ball')
+        this.create()
+    }
+
+    toString() {
+        return `${this.width} ${this.height} ${this.player1_score} ${this.player2_score}`;
+    }
+
+    create() {
+        let ball = this.ball
+        ball.hidden = false
+        ball.style['left'] = '750px'
+
+        let player1 = document.getElementById('player-1')
+
+        let movingBall = setInterval(() => {
+            if (this.direction === 'left') {
+                ball.style['left'] = `${Number(getComputedStyle(ball)['left'].slice(0, -2)) - 10}px`
+
+                if (Number(getComputedStyle(ball)['left'].slice(0, -2)) <= 580) {
+                    ball.hidden = true
+                    clearInterval(movingBall)
+                }
+
+                // console.log(ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right)
+                // console.log(ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left)
+                // console.log(ball.getBoundingClientRect().top <= player1.getBoundingClientRect().top)
+                // console.log(ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().bottom)
+                console.log(ball.getBoundingClientRect().left >= player1.getBoundingClientRect().right)
+                console.log(ball.getBoundingClientRect().left <= player1.getBoundingClientRect().left)
+                console.log(ball.getBoundingClientRect().top >= player1.getBoundingClientRect().top)
+                console.log(ball.getBoundingClientRect().bottom <= player1.getBoundingClientRect().bottom)
+                if (ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right && ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left && (ball.getBoundingClientRect().top <= player1.getBoundingClientRect().top || ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().bottom)) {
+                    console.log('hi')
+                    this.direction = 'right'
+                }
+            }
+            if (this.direction === 'right') {
+                ball.style['left'] = `${Number(getComputedStyle(ball)['left'].slice(0, -2)) + 10}px`
+
+                if (Number(getComputedStyle(ball)['left'].slice(0, -2)) >= 1350) {
+                    ball.hidden = true
+                    clearInterval(movingBall)
+                }
+            }
+            console.log(ball.style['left'])
+        }, 1000)
+    }
+}
+
 function main() {
     let gameContainer = document.getElementById('game-container')
     let game = new Game(750, 750);
 
+    let ball;
+
     document.addEventListener('keydown', (event) => {
         let key = event.key
         // console.log(event)
-    
+
         if (gameStarting) {
             let startPrompt = document.getElementById('start-prompt')
             startPrompt.hidden = true
-    
+
+            let ball = document.getElementById('ball')
+            ball.hidden = false
+
+            ball = new Ball('left', 10)
+
             gameStarting = false
         } else {
             let player1 = document.getElementById('player-1')
             let player2 = document.getElementById('player-2')
-    
-    
+
             if (key === 'w') {
                 console.log('hi')
                 if (Number(getComputedStyle(player1)['top'].slice(0, -2)) <= 80) return;
