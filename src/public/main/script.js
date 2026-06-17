@@ -12,6 +12,27 @@ player2Score.innerText = (0).toLocaleString('en-US', {
     useGrouping: false
 })
 
+function angleCalculator(x1, y1, x2, y2) {
+    let differenceInX;
+    let differenceInY;
+    if (x1 > x2 || y1 > y2) {
+        differenceInX = x1 - x2
+        differenceInY = y1 - y2
+    } else {
+        differenceInX = x2 - x1
+        differenceInY = y2 - y1
+    }
+    
+    let opposite = differenceInY;
+    let hypotenuse = differenceInX;
+    let angle = Math.tan(degreesToRadians(hypotenuse / opposite))
+    return angle
+}
+
+function degreesToRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
 class Game {
     static id = 1;
 
@@ -59,17 +80,7 @@ class Ball {
                     ball.hidden = true
                     clearInterval(movingBall)
                 }
-
-                // console.log(ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right)
-                // console.log(ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left)
-                // console.log(ball.getBoundingClientRect().top <= player1.getBoundingClientRect().top)
-                // console.log(ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().bottom)
-                console.log(ball.getBoundingClientRect().left >= player1.getBoundingClientRect().right)
-                console.log(ball.getBoundingClientRect().left <= player1.getBoundingClientRect().left)
-                console.log(ball.getBoundingClientRect().top >= player1.getBoundingClientRect().top)
-                console.log(ball.getBoundingClientRect().bottom <= player1.getBoundingClientRect().bottom)
-                if (ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right && ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left && (ball.getBoundingClientRect().top <= player1.getBoundingClientRect().top || ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().bottom)) {
-                    console.log('hi')
+                if (ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right && ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left && ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player1.getBoundingClientRect().bottom) {
                     this.direction = 'right'
                 }
             }
@@ -80,9 +91,12 @@ class Ball {
                     ball.hidden = true
                     clearInterval(movingBall)
                 }
+                if (ball.getBoundingClientRect().right <= player2.getBoundingClientRect().left && ball.getBoundingClientRect().right >= player2.getBoundingClientRect().right && ball.getBoundingClientRect().bottom >= player2.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player2.getBoundingClientRect().bottom) {
+                    this.direction = 'left'
+                }
             }
             console.log(ball.style['left'])
-        }, 1000)
+        }, 50)
     }
 }
 
