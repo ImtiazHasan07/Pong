@@ -133,12 +133,12 @@ function main() {
                 }
 
                 if (ball.y < 0 || ball.y > canvas.height) {
-                    if (Math.floor(Math.random() * 2) + 1 === 1) {
+                    if (ball.direction > 0) {
                         ball.direction += 135
-                        ball.direction += 90
+                        // ball.direction += 90
                     } else {
                         ball.direction -= 135
-                        ball.direction -= 90
+                        // ball.direction -= 90
                     }
                     ball.speed += 1
                 }
