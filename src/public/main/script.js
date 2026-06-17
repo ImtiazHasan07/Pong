@@ -7,8 +7,8 @@ class Game {
     this.scoreLimit = 3
     this.gameInProgress = false;
     
-    this.paddleHeight = 100;
-    this.paddleWidth = 10;
+    this.paddleHeight = 150;
+    this.paddleWidth = 15;
     this.paddleSpeed = 10;
 
     this.paddle1Data = {
@@ -96,22 +96,24 @@ class Game {
       this.draw();
       if (this.gameInProgress) {
         if (keys['w']) {
-          if (this.paddle1Data.y <= 0) return;
-          this.paddle1Data.y -= this.paddleSpeed;
+          if (this.paddle1Data.y >= 0) {
+            this.paddle1Data.y -= this.paddleSpeed;
+          };
         }
         if (keys['s']) {
-          if (this.paddle1Data.y >= 660) return;
-          // if (this.paddle1Data.y >= canvas.width - this.paddleWidth) return;
-          this.paddle1Data.y += this.paddleSpeed;
+            if (this.paddle1Data.y <= canvas.height - this.paddleHeight) {
+            this.paddle1Data.y += this.paddleSpeed;
+          };
         }
         if (keys['ArrowUp']) {
-          if (this.paddle2Data.y <= 0) return;
-          this.paddle2Data.y -= this.paddleSpeed;
+          if (this.paddle2Data.y >= 0) {
+            this.paddle2Data.y -= this.paddleSpeed;
+          }
         }
         if (keys['ArrowDown']) {
-          if (this.paddle2Data.y >= 660) return;
-          // if (this.paddle2Data.y >= canvas.width - this.paddleWidth) return;
-          this.paddle2Data.y += this.paddleSpeed;
+            if (this.paddle2Data.y <= canvas.height - this.paddleHeight) {
+            this.paddle2Data.y += this.paddleSpeed;
+          };
         }
 
         if (this.ball.direction < 0) {
@@ -160,15 +162,15 @@ class Game {
             ball.speed = ball.originalSpeed;
             ball.direction = ball.originalDirection;
           }
-          resetBall(this.ball);
-          console.log(this.ball.x)
 
+          console.log(1, this.ball.x <= 0, this.ball.x >= canvas.width, this.paddle1Data, this.paddle2Data);
           if (this.ball.x <= 0) {
             this.paddle2Data.score += 1;
           } else {
             this.paddle1Data.score += 1;
           }
-          console.log(this.paddle1Data, this.paddle2Data);
+          console.log(this.ball.x <= 0, this.ball.x >= canvas.width, this.paddle1Data, this.paddle2Data);
+          resetBall(this.ball);
         }
 
         if ([this.paddle1Data.score, this.paddle2Data.score].some((value) => value >= this.scoreLimit)) {

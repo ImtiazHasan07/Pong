@@ -1,5 +1,5 @@
 bugs
-Only player 1 gets points for some reason
+Only player 2 point system is wierd bug. adds extra 1 and etc.
 paddle 2 collision and its wall is weird
 
 adding angles and more directions besides 180/-180 degree
