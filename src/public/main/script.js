@@ -69,7 +69,7 @@ function main() {
         originalX: canvas.width / 2 - 20,
         originalY: canvas.height / 2 - 30,
         originalSpeed: 5,
-        originalDirection: 180,
+        originalDirection: -180,
         x: null,
         y: null,
         width: 10,
@@ -124,31 +124,43 @@ function main() {
 
         if (gameStarting) {
             let ballMovement = setInterval(() => {
-                ball.x += ball.speed * Math.cos(degreesToRadians(ball.direction));
-                ball.y += ball.speed * Math.sin(degreesToRadians(ball.direction));
+                if (ball.direction < 0) {
+                    ball.x += ball.speed * Math.cos(degreesToRadians(ball.direction));
+                    ball.y += ball.speed * Math.sin(degreesToRadians(ball.direction));
+                } else {
+                    ball.x -= ball.speed * Math.cos(degreesToRadians(ball.direction));
+                    ball.y -= ball.speed * Math.sin(degreesToRadians(ball.direction));
+                }
 
                 if (ball.y < 0 || ball.y > canvas.height) {
-                    ball.direction = -ball.direction
-                    // ball.direction = 180 - ball.direction
+                    if (Math.floor(Math.random() * 2) + 1 === 1) {
+                        ball.direction += 135
+                        ball.direction += 90
+                    } else {
+                        ball.direction -= 135
+                        ball.direction -= 90
+                    }
+                    ball.speed += 1
                 }
-                console.log(ball.direction)
 
                 if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
+                    ball.direction = -ball.direction
                     if (Math.floor(Math.random() * 2) + 1 === 1) {
                         ball.direction += 45
                     } else {
                         ball.direction -= 45
                     }
-                    // ball.direction = 180 - ball.direction
+                    ball.speed += 1
                 }
 
                 if (ball.x >= player_2.x && ball.y >= player_2.y && ball.y <= player_2.y + player_2.height) {
-                    // if (Math.floor(Math.random() * 2) + 1 === 1) {
-                    //     ball.direction += 45
-                    // } else {
-                    //     ball.direction -= 45
-                    // }
-                    // ball.direction = 180 - ball.direction
+                    ball.direction = -ball.direction
+                    if (Math.floor(Math.random() * 2) + 1 === 1) {
+                        ball.direction += 45
+                    } else {
+                        ball.direction -= 45
+                    }
+                    ball.speed += 1
                 }
 
                 if (ball.x <= 0) {
@@ -159,7 +171,6 @@ function main() {
                     ball.y = ball.originalY
                     ball.speed = ball.originalSpeed
                     ball.direction = ball.originalDirection
-
                 } else if (ball.x >= 750) {
                     ball.x = ball.originalX
                     ball.y = ball.originalY
@@ -169,6 +180,7 @@ function main() {
                     ball.speed = ball.originalSpeed
                     ball.direction = ball.originalDirection
                 }
+
                 window.requestAnimationFrame(draw);
                 if (player_1.score >= 10 || player_2.score >= 10) {
                     ball.x = -500
