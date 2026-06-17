@@ -11,11 +11,7 @@ h1 {
     text-align: center;
 }
 
-.game-container {
-    /* border: 1px solid #000000; */
-    background-color: #000000;
-    width: 750px;
-    height: 750px;
+.game {
     margin-left: 30.5%;
 }
 
