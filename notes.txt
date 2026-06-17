@@ -1,3 +1,5 @@
+adding angles and more directions besides 180/-180 degree
+
 get mid point of paddle/player (height or length / 2)
 
 get mid point of ball (height of the left side of the ball / 2)

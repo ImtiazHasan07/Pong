@@ -14,7 +14,7 @@ function formatNumber(number) {
 }
 
 function angleCalculator(x1, y1, x2, y2) {
-    // console.log(`(${x1}, ${y1}), (${x2}, ${y2})`)
+    console.log(`(${x1}, ${y1}), (${x2}, ${y2})`)
     let differenceInX;
     let differenceInY;
     if (x1 > x2 || y1 > y2) {
@@ -26,10 +26,12 @@ function angleCalculator(x1, y1, x2, y2) {
     }
 
     let opposite = differenceInY;
-    let hypotenuse = differenceInX;
-    // console.log(opposite)
-    // console.log(hypotenuse)
-    let angle = Math.tan(degreesToRadians(hypotenuse / opposite))
+    let adjacent = differenceInX;
+    console.log(opposite)
+    console.log(adjacent)
+    console.log(opposite / adjacent)
+    console.log(degreesToRadians(opposite / adjacent))
+    let angle = Math.atan(degreesToRadians(opposite / adjacent))
 
     if (!angle) return 180
     return angle
@@ -99,8 +101,15 @@ class Ball {
                 }
                 if (ball.getBoundingClientRect().left <= player1.getBoundingClientRect().right && ball.getBoundingClientRect().left >= player1.getBoundingClientRect().left && ball.getBoundingClientRect().bottom >= player1.getBoundingClientRect().top && ball.getBoundingClientRect().top <= player1.getBoundingClientRect().bottom) {
                     this.direction = 'right'
-
-                    // console.log(angleCalculator((player1.getBoundingClientRect().bottom - player1.getBoundingClientRect().top) / 2, (player1.getBoundingClientRect().right - player1.getBoundingClientRect().left) / 2, (ball.getBoundingClientRect().bottom - ball.getBoundingClientRect().top) / 2, (ball.getBoundingClientRect().right - ball.getBoundingClientRect().left) / 2))
+                    // console.log(`Player top: ${player1.getBoundingClientRect().top}`)
+                    // console.log(`Ball top: ${ball.getBoundingClientRect().top}`)
+                    // console.log(`Player bottom: ${player1.getBoundingClientRect().bottom}`)
+                    // console.log(`Ball bottom: ${ball.getBoundingClientRect().bottom}`)
+                    // console.log(`Player left: ${player1.getBoundingClientRect().left}`)
+                    // console.log(`Ball left: ${ball.getBoundingClientRect().left}`)
+                    // console.log(`Player right: ${player1.getBoundingClientRect().right}`)
+                    // console.log(`Ball right: ${ball.getBoundingClientRect().right}`)
+                    console.log(angleCalculator((player1.getBoundingClientRect().bottom + player1.getBoundingClientRect().top) / 2, player1.getBoundingClientRect().right, (ball.getBoundingClientRect().bottom + ball.getBoundingClientRect().top) / 2, (ball.getBoundingClientRect().right + ball.getBoundingClientRect().left) / 2))
                 }
             }
             if (this.direction === 'right') {
@@ -135,9 +144,11 @@ function main() {
     let game = new Game(750, 750);
 
     let ball;
+    let keys = {};
 
     document.addEventListener('keydown', (event) => {
         let key = event.key
+        keys[key] = true;
 
         if (gameStarting) {
             let startPrompt = document.getElementById('start-prompt')
@@ -170,6 +181,18 @@ function main() {
             console.log(`Player 2: ${getComputedStyle(player2)['top']}`)
         }
     })
+
+    window.addEventListener('keyup', (event) => {
+        let key = event.key
+        delete keys[key];
+    });
+    
+    function render() {
+        element.textContent = JSON.stringify(keys);
+        requestAnimationFrame(render);
+    }
+    
+    render()
 
     gameContainer.addEventListener('contextmenu', (event) => {
         event.preventDefault()
