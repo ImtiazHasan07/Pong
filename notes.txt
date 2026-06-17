@@ -7,6 +7,6 @@ get mid point of ball (height of the left side of the ball / 2)
 
 
 
-
+round winner starts
 
 ball spawns from center at random positions and directions (angles)

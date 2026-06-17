@@ -30,8 +30,8 @@ function main() {
         y: canvas.height / 2 - 30,
         width: 10,
         height: 10,
-        miliseconds: 100,
-        // miliseconds: 30,
+        // miliseconds: 100,
+        miliseconds: 50,
         direction: -90
     }
     ball.x = ball.originalX
@@ -79,32 +79,33 @@ function main() {
         if (gameStarting) {
             let ballMovement = setInterval(() => {
                 if (ball.direction >= -180 && ball.direction < 0) {
-                    ball.x -= 10
-                } else if (ball.direction.direction >= 0 && ball.direction >= 180) {
-                    ball.x += 10
+                    // ball.x -= 10
+                    ball.x -= 20
+                } else if (ball.direction >= 0 && ball.direction <= 180) {
+                    // ball.x += 10
+                    ball.x += 20
 
                 }
-
-                console.log(`Player 1 x: ${player_1.x}\nBall x:${ball.x}`)
-                console.log(ball.x >= player_1.x)
-                console.log(ball.x <= player_1.x + player_1.width)
-                console.log(ball.y >= player_1.y)
-                console.log(ball.y <= player_1.y + player_1.height)
-                console.log(player_1.height)
                 if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
-                // if (ball.x >= player_1.x && ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height) {
-                    console.log(ball.direction)
-                    ball.direction = -ball.direction
-                    console.log(ball.direction)
-                    console.log('direction change ^^^ dnjkofgmnsjonfmgsjoingfsjonfgsjiongfsjinsgfjiongsfjionju')
+                    if (ball.direction < 0) {
+                        ball.direction = -ball.direction
+                    }
+                }
+
+                if (ball.x >= player_2.x && ball.y >= player_2.y && ball.y <= player_2.y + player_2.height) {
+                    if (ball.direction > 0) {
+                        ball.direction = -ball.direction
+                    }
                 }
 
                 if (ball.x <= 0) {
                     ball.x = ball.originalX
                     player_2.score += 1
+                    ball.direction = 90
                 } else if (ball.x >= 750) {
                     ball.x = ball.originalX
                     player_1.score += 1
+                    ball.direction = -90
                 }
                 window.requestAnimationFrame(draw);
                 if (player_1.score >= 10 || player_2.score >= 10) {
