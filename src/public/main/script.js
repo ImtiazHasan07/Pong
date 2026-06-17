@@ -1,6 +1,34 @@
 const canvas = document.getElementById('game')
 const context = canvas.getContext('2d')
 
+function angleCalculator(x1, y1, x2, y2) {
+    console.log(`(${x1}, ${y1}), (${x2}, ${y2})`)
+    let differenceInX;
+    let differenceInY;
+    if (x1 > x2 || y1 > y2) {
+        differenceInX = x1 - x2
+        differenceInY = y1 - y2
+    } else {
+        differenceInX = x2 - x1
+        differenceInY = y2 - y1
+    }
+
+    let opposite = differenceInY;
+    let adjacent = differenceInX;
+    console.log(opposite)
+    console.log(adjacent)
+    console.log(opposite / adjacent)
+    console.log(degreesToRadians(opposite / adjacent))
+    let angle = Math.atan(degreesToRadians(opposite / adjacent))
+
+    if (!angle) return 180
+    return angle
+}
+
+function degreesToRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
 function main() {
     let gameStarting = true
 
