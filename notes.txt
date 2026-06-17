@@ -1,3 +1,11 @@
+bugs
+
+
+
+
+
+
+
 adding angles and more directions besides 180/-180 degree
 
 get mid point of paddle/player (height or length / 2)
