@@ -68,13 +68,14 @@ function main() {
     let ball = {
         originalX: canvas.width / 2 - 20,
         originalY: canvas.height / 2 - 30,
+        originalSpeed: 50,
         x: null,
         y: canvas.height / 2 - 30,
         width: 10,
         height: 10,
-        // miliseconds: 100,
-        miliseconds: 50,
-        direction: 0
+        speed: 5,
+        direction: 45,
+        angle: 45
     }
     ball.x = ball.originalX
 
@@ -114,58 +115,36 @@ function main() {
         }
     }
 
-    function moveBall(x = 0, y = 0) {
-        ball.x += x
-        ball.y += y
-    }
-
     document.addEventListener('keydown', (event) => {
         let key = event.key
         keys[key] = true;
 
         if (gameStarting) {
             let ballMovement = setInterval(() => {
-                // if (ball.direction >= -180 && ball.direction < 0) {
-                //     // ball.x -= 10
-                //     moveBall(-10, -10)
-                // } else if (ball.direction >= 0 && ball.direction <= 180) {
-                //     // ball.x += 10
-                //     moveBall(10, 10)
-                // }
-                console.log(ball.direction)
-                if ((ball.direction >= 0 || ball.direction === 360) && ball.direction < 90) {
-                    moveBall(-10, 10)
-                } else if (ball.direction >= 90 && ball.direction < 180) {
-                    moveBall(10, 10)
-                } else if (ball.direction >= 180 && ball.direction < 270) {
-                    moveBall(10, -10)
-                } else if (ball.direction >= 270 && ball.direction < 360) {
-                    moveBall(-10, -10)
-                }
+                ball.x += ball.speed * Math.cos(degreesToRadians(ball.direction));
+                ball.y += ball.speed * Math.sin(degreesToRadians(ball.direction));
 
                 if (ball.y < 0 || ball.y > canvas.height) {
-                    ball.direction += 90
+                    ball.direction = -ball.direction
                 }
 
                 if (ball.x <= player_1.x + player_1.width && ball.y >= player_1.y && ball.y <= player_1.y + player_1.height && ball.direction < 0) {
-                    ball.direction += 90
-
-                    // console.log(angleCalculator(player_1.x, ((player_1.y + (player_1.y + player_1.height)) / 2), ((ball.x + player_1.width) + ball.x) / 2, ((ball.y + player_1.height) + ball.y) / 2))
+                    ball.direction += 45
                 }
 
                 if (ball.x >= player_2.x && ball.y >= player_2.y && ball.y <= player_2.y + player_2.height && ball.direction > 0) {
-                    ball.direction += 90
-
-                    // console.log(angleCalculator)
+                    ball.direction = -ball.direction
                 }
 
                 if (ball.x <= 0) {
                     ball.x = ball.originalX
+                    ball.y = ball.originalY
                     player_2.score += 1
                     ball.direction = 0
 
                 } else if (ball.x >= 750) {
                     ball.x = ball.originalX
+                    ball.y = ball.originalY
                     player_1.score += 1
                     ball.direction = 180
                 }
@@ -179,7 +158,7 @@ function main() {
                     clearInterval(ballMovement);
                 }
                 // ball.x = ball.originalX
-            }, ball.miliseconds)
+            }, 1)
 
             gameStarting = false
         } else {
